@@ -14,7 +14,8 @@ import {
   Award,
   Users,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  ChalkboardTeacher
 } from 'lucide-react';
 import './App.css';
 
@@ -34,7 +35,7 @@ const App = () => {
       setShowScrollTop(window.scrollY > 300);
       
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'services', 'contact'];
+      const sections = ['home', 'about', 'services', 'training', 'resources', 'contact'];
       const scrollPosition = window.scrollY + 100;
       
       for (const section of sections) {
@@ -100,6 +101,49 @@ const App = () => {
     "Chartered Privacy and Access Professional (CAPP)"
   ];
 
+  const workshops = [
+    {
+      title: "Cybersecurity for Small Business",
+      description: "Understand the threats and learn practical steps to protect your business data and systems."
+    },
+    {
+      title: "IP Strategy for Startups",
+      description: "Learn how to identify, protect, and monetize your intellectual property assets."
+    },
+    {
+      title: "Privacy Compliance (PIPEDA)",
+      description: "A deep dive into Canada's private sector privacy law and how it applies to your organization."
+    },
+    {
+      title: "AI Governance & Risk Management",
+      description: "Navigate the legal and ethical challenges of implementing AI in your business."
+    }
+  ];
+
+  const publications = [
+    {
+      title: "The Digital Compass: Navigating Maritime Law in the 21st Century",
+      journal: "Journal of Maritime Law & Commerce",
+      year: 2023,
+      summary: "An analysis of emerging legal challenges in the maritime industry, from autonomous shipping to cybersecurity threats on the Great Lakes.",
+      link: "#"
+    },
+    {
+      title: "PIPEDA for Innovators: A Guide to Privacy Compliance in Tech",
+      journal: "Canadian Journal of Law and Technology",
+      year: 2022,
+      summary: "This article provides a practical framework for startups and tech companies to build privacy-by-design into their products and services.",
+      link: "#"
+    },
+    {
+      title: "Securing the Chain: Legal Implications of Supply Chain Cybersecurity",
+      journal: "International Journal of Law and Information Technology",
+      year: 2021,
+      summary: "Examines the cascading legal responsibilities for cybersecurity failures within complex global supply chains.",
+      link: "#"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -113,7 +157,7 @@ const App = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['home', 'about', 'services', 'contact'].map((item) => (
+                {['home', 'about', 'services', 'training', 'resources', 'contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
@@ -151,7 +195,7 @@ const App = () => {
               className="md:hidden bg-white border-t border-gray-200"
             >
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {['home', 'about', 'services', 'contact'].map((item) => (
+                {['home', 'about', 'services', 'training', 'resources', 'contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
@@ -312,6 +356,91 @@ const App = () => {
                     </li>
                   ))}
                 </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Training and Workshops Section */}
+      <section id="training" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
+              Training & Workshops
+            </h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Leveraging extensive experience as an educator, Tim Harmar offers customized training sessions.
+              Available virtually or in-person, for individuals or entire organizations.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {workshops.map((workshop, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 group"
+              >
+                <div className="flex items-center mb-4">
+                  <ChalkboardTeacher className="w-8 h-8 text-teal-500 mr-3" />
+                  <h3 className="text-xl font-bold text-blue-900">{workshop.title}</h3>
+                </div>
+                <p className="text-gray-700">{workshop.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Resources Section */}
+      <section id="resources" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
+              Resources & Publications
+            </h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Explore insightful articles and publications by Tim Harmar, contributing to the discourse on law and technology.
+            </p>
+          </motion.div>
+
+          <div className="space-y-8">
+            {publications.map((pub, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow duration-300 group"
+              >
+                <h3 className="text-xl font-bold text-blue-900 mb-2">{pub.title}</h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  <span className="font-semibold">{pub.journal}</span>, {pub.year}
+                </p>
+                <p className="text-gray-700 mb-4">{pub.summary}</p>
+                <a
+                  href={pub.link}
+                  className="text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-2"
+                >
+                  Read More <ArrowRight size={18} />
+                </a>
               </motion.div>
             ))}
           </div>
