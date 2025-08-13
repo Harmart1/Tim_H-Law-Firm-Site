@@ -20,12 +20,9 @@ import {
 import './App.css';
 
 // Import assets
-// import logoImage from './assets/tim_harmar_logo_updated.png';
-// import heroBackground from './assets/hero_background.png';
-// import cybersecurityIcon from './assets/services_cybersecurity.png';
-const logoImage = '/assets/tim_harmar_logo_updated.png';
-const heroBackground = '/assets/hero_background.png';
-
+import logoImage from './assets/tim_harmar_logo_updated.png';
+import heroBackground from './assets/hero_background.png';
+import cybersecurityIcon from './assets/services_cybersecurity.png';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
