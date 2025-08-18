@@ -1,0 +1,21 @@
+{
+  "name": "Tim Harmar Legal & Consulting Services",
+  "short_name": "Harmar Legal",
+  "description": "Specialized legal expertise in cybersecurity, IP, maritime law, and business consulting in Sault Ste. Marie, Ontario.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0C2340",
+  "icons": [
+    {
+      "src": "/assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

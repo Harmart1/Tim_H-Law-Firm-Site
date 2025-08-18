@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { 
   Shield, 
   Ship, 
@@ -31,6 +32,28 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const form = useRef();
+  const [formStatus, setFormStatus] = useState({ status: '', message: '' });
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setFormStatus({ status: 'loading', message: 'Sending...' });
+
+    emailjs.sendForm(
+      'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+      'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+      form.current,
+      'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+    )
+    .then((result) => {
+        console.log(result.text);
+        setFormStatus({ status: 'success', message: 'Message sent successfully!' });
+        form.current.reset();
+    }, (error) => {
+        console.log(error.text);
+        setFormStatus({ status: 'error', message: 'Failed to send message. Please try again later.' });
+    });
+  };
 
   // Handle scroll events
   useEffect(() => {
@@ -38,7 +61,7 @@ const App = () => {
       setShowScrollTop(window.scrollY > 300);
       
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'services', 'training', 'resources', 'contact'];
+      const sections = ['home', 'about', 'services', 'training', 'insights', 'contact'];
       const scrollPosition = window.scrollY + 100;
       
       for (const section of sections) {
@@ -125,24 +148,33 @@ const App = () => {
 
   const publications = [
     {
+      type: "Blog Post",
+      title: "5 Common Cybersecurity Mistakes Small Businesses Make",
+      date: "August 1, 2025",
+      summary: "A quick guide to help small business owners in Sault Ste. Marie avoid common pitfalls in their cybersecurity strategy.",
+      link: "#"
+    },
+    {
+      type: "Article",
       title: "The Digital Compass: Navigating Maritime Law in the 21st Century",
       journal: "Journal of Maritime Law & Commerce",
-      year: 2023,
+      date: "Fall 2023",
       summary: "An analysis of emerging legal challenges in the maritime industry, from autonomous shipping to cybersecurity threats on the Great Lakes.",
       link: "#"
     },
     {
-      title: "PIPEDA for Innovators: A Guide to Privacy Compliance in Tech",
-      journal: "Canadian Journal of Law and Technology",
-      year: 2022,
-      summary: "This article provides a practical framework for startups and tech companies to build privacy-by-design into their products and services.",
+      type: "Blog Post",
+      title: "Is Your AI Compliant? A Primer on AI Governance",
+      date: "July 15, 2025",
+      summary: "Understanding the evolving legal landscape of Artificial Intelligence is crucial for any business deploying AI solutions.",
       link: "#"
     },
     {
-      title: "Securing the Chain: Legal Implications of Supply Chain Cybersecurity",
-      journal: "International Journal of Law and Information Technology",
-      year: 2021,
-      summary: "Examines the cascading legal responsibilities for cybersecurity failures within complex global supply chains.",
+      type: "Article",
+      title: "PIPEDA for Innovators: A Guide to Privacy Compliance in Tech",
+      journal: "Canadian Journal of Law and Technology",
+      date: "Spring 2022",
+      summary: "This article provides a practical framework for startups and tech companies to build privacy-by-design into their products and services.",
       link: "#"
     }
   ];
@@ -160,7 +192,7 @@ const App = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['home', 'about', 'services', 'training', 'resources', 'contact'].map((item) => (
+                {['home', 'about', 'services', 'training', 'insights', 'contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
@@ -198,7 +230,7 @@ const App = () => {
               className="md:hidden bg-white border-t border-gray-200"
             >
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {['home', 'about', 'services', 'training', 'resources', 'contact'].map((item) => (
+                {['home', 'about', 'services', 'training', 'insights', 'contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
@@ -405,8 +437,8 @@ const App = () => {
         </div>
       </section>
 
-      {/* Resources Section */}
-      <section id="resources" className="py-20 bg-white">
+      {/* Insights Section */}
+      <section id="insights" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -416,10 +448,10 @@ const App = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
-              Resources & Publications
+              Insights & Publications
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Explore insightful articles and publications by Tim Harmar, contributing to the discourse on law and technology.
+              Explore insightful articles, blog posts, and publications by Tim Harmar, contributing to the discourse on law and technology.
             </p>
           </motion.div>
 
@@ -433,10 +465,12 @@ const App = () => {
                 viewport={{ once: true }}
                 className="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow duration-300 group"
               >
+                <div className="flex justify-between items-center mb-3">
+                  <span className={`text-sm font-bold ${pub.type === 'Article' ? 'text-blue-600' : 'text-teal-600'}`}>{pub.type}</span>
+                  <span className="text-sm text-gray-500">{pub.date}</span>
+                </div>
                 <h3 className="text-xl font-bold text-blue-900 mb-2">{pub.title}</h3>
-                <p className="text-sm text-gray-600 mb-3">
-                  <span className="font-semibold">{pub.journal}</span>, {pub.year}
-                </p>
+                {pub.journal && <p className="text-sm text-gray-600 mb-3 italic">Published in: <span className="font-semibold">{pub.journal}</span></p>}
                 <p className="text-gray-700 mb-4">{pub.summary}</p>
                 <a
                   href={pub.link}
@@ -509,27 +543,31 @@ const App = () => {
               className="bg-white/10 p-8 rounded-lg backdrop-blur-sm"
             >
               <h3 className="text-2xl font-bold mb-6">Schedule a Consultation</h3>
-              <form className="space-y-4">
+              <form ref={form} onSubmit={sendEmail} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">Name</label>
                   <input
                     type="text"
+                    name="user_name"
                     className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-teal-300"
                     placeholder="Your full name"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Email</label>
                   <input
                     type="email"
+                    name="user_email"
                     className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-teal-300"
                     placeholder="your.email@example.com"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Legal Matter</label>
-                  <select className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-teal-300">
-                    <option value="">Select a service area</option>
+                  <select name="legal_matter" defaultValue="" className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-teal-300" required>
+                    <option value="" disabled>Select a service area</option>
                     <option value="cybersecurity">Cybersecurity & Privacy Law</option>
                     <option value="maritime">Maritime & Shipping Law</option>
                     <option value="ip">Intellectual Property Law</option>
@@ -541,16 +579,24 @@ const App = () => {
                   <label className="block text-sm font-medium mb-2">Message</label>
                   <textarea
                     rows={4}
+                    name="message"
                     className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-teal-300"
                     placeholder="Brief description of your legal needs..."
+                    required
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                  className="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:bg-gray-400"
+                  disabled={formStatus.status === 'loading'}
                 >
-                  Send Message
+                  {formStatus.status === 'loading' ? 'Sending...' : 'Send Message'}
                 </button>
+                {formStatus.message && (
+                  <p className={`mt-4 text-center ${formStatus.status === 'success' ? 'text-green-300' : 'text-red-400'}`}>
+                    {formStatus.message}
+                  </p>
+                )}
               </form>
             </motion.div>
           </div>
