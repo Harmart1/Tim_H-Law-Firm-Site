@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import ChatBot from 'react-chatbotify';
 import { 
   Shield, 
   Ship, 
@@ -178,6 +179,51 @@ const App = () => {
       link: "#"
     }
   ];
+
+  const flow = {
+    start: {
+      message: "Hello! Welcome to Tim Harmar Legal & Consulting Services. How can I help you today?",
+      options: ["Tell me about your services", "What are your contact details?", "I have another question."],
+      path: (params) => {
+        switch (params.userInput) {
+          case "Tell me about your services":
+            return "services";
+          case "What are your contact details?":
+            return "contact";
+          case "I have another question.":
+            return "other_question";
+        }
+      },
+    },
+    services: {
+      message: "We offer specialized expertise in several areas. Which one are you interested in?",
+      options: services.map(s => s.title),
+      path: "service_details",
+    },
+    service_details: {
+      message: (params) => {
+        const service = services.find(s => s.title === params.userInput);
+        return service.description;
+      },
+      path: "start",
+    },
+    contact: {
+      message: "You can reach us at:\n\nPhone: 705.943.0634\n\nEmail: timharmar@yahoo.ca\n\nOffice: 67 Hugill Street, Sault Ste. Marie, ON P6A 4E6",
+      path: "start",
+    },
+    other_question: {
+      message: "Please type your question below. If I can't answer, I can connect you with a member of our team.",
+      path: (params) => {
+        // In a real application, you would handle the user's question here.
+        // For now, we will just provide a generic response.
+        return "generic_response";
+      }
+    },
+    generic_response: {
+        message: "Thank you for your question. A member of our team will get back to you shortly.",
+        end: true,
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -472,12 +518,12 @@ const App = () => {
                 <h3 className="text-xl font-bold text-blue-900 mb-2">{pub.title}</h3>
                 {pub.journal && <p className="text-sm text-gray-600 mb-3 italic">Published in: <span className="font-semibold">{pub.journal}</span></p>}
                 <p className="text-gray-700 mb-4">{pub.summary}</p>
-                <a
+                {/* <a
                   href={pub.link}
                   className="text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-2"
                 >
                   Read More <ArrowRight size={18} />
-                </a>
+                </a> */}
               </motion.div>
             ))}
           </div>
@@ -652,6 +698,7 @@ const App = () => {
           </motion.button>
         )}
       </AnimatePresence>
+      <ChatBot flow={flow} />
     </div>
   );
 };
